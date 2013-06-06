@@ -24,34 +24,60 @@ namespace WpfGridLayout
         List<DoctorSchedule> data;
         public MainWindow()
         {
+
             InitializeComponent();
 
             SetData();
+            Grid outerGrid = new Grid();
+            Content = outerGrid;
+
+            //ColumnDefinition col;
+            //col = new ColumnDefinition();
+            //col.Width = new GridLength(1, GridUnitType.Star);
+            //outerGrid.ColumnDefinitions.Add(col);
+
+            CreateTable(outerGrid, 0);
+            CreateTable(outerGrid, 1);
+            CreateTable(outerGrid, 2);
+            CreateTable(outerGrid, 3);
+            CreateTable(outerGrid, 4);
+
+        }
+
+        private void CreateTable(Grid outerGrid, int column)
+        {
+
+            ColumnDefinition col;
+            col = new ColumnDefinition();
+            col.Width = new GridLength(1, GridUnitType.Star);
+            outerGrid.ColumnDefinitions.Add(col);
 
             Border border = new Border();
             border.Background = Brushes.Blue;
             border.BorderThickness = new Thickness(10);
+            outerGrid.Children.Add(border);
+            Grid.SetColumn(border, column);
 
-            Content = border;
+            //Content = border;
 
             Grid grid = new Grid();
             grid.Margin = new Thickness(10);
 
             border.Child = grid;
 
-            ColumnDefinition col = new ColumnDefinition();
+            col = new ColumnDefinition();
             col.Width = new GridLength(1, GridUnitType.Star);
             grid.ColumnDefinitions.Add(col);
 
             col = new ColumnDefinition();
-            col.Width = new GridLength(1, GridUnitType.Star);
+            col.Width = new GridLength(4, GridUnitType.Star);
             grid.ColumnDefinitions.Add(col);
-            
+
             RowDefinition row;
             Label label;
             var cellMargin = 1;
             int rowSpanStartAt = 0;
-            int maxNumRows = 40;
+            int maxNumRows = 10;
 
             for (var i = 0; i < maxNumRows; i++)
             {
@@ -59,7 +85,7 @@ namespace WpfGridLayout
                 row.Height = new GridLength(1, GridUnitType.Star);
                 grid.RowDefinitions.Add(row);
 
-                if ((!data[i].DepartName.Equals(data[i + 1].DepartName) || (i == maxNumRows -1)))
+                if ((!data[i].DepartName.Equals(data[i + 1].DepartName) || (i == maxNumRows - 1)))
                 {
                     label = new Label();
                     label.Background = Brushes.Beige;
@@ -71,9 +97,9 @@ namespace WpfGridLayout
                     Grid.SetRow(label, rowSpanStartAt);
                     Grid.SetColumn(label, 0);
                     Grid.SetRowSpan(label, (i - rowSpanStartAt + 1));
-                    rowSpanStartAt = i+1;
+                    rowSpanStartAt = i + 1;
                 }
-                
+
                 label = new Label();
                 label.Background = Brushes.Beige;
                 label.Margin = new Thickness(cellMargin);
